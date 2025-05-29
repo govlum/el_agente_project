@@ -81,15 +81,7 @@ def _apply_rotation(xyz, R):
     return (xyz - cen) @ R.T + cen
 
 
-def _translate_until_clear(
-    xyz_mol: np.ndarray,
-    xyz_ref: np.ndarray,
-    direction: np.ndarray,
-    start_shift: float,
-    target: float,
-    tol: float = 1e-4,
-    max_iter: int = 25,
-):
+def _translate_until_clear(xyz_mol, xyz_ref, direction, start_shift, target, tol = 1e-4, max_iter = 25):
     """
     Translate *xyz_mol* along *direction* until every inter-atomic distance to
     *xyz_ref* is ≥ target-tol.  Returns the translated coordinates and the
@@ -112,15 +104,7 @@ def _translate_until_clear(
         )
     return xyz, shift
 
-def _orient_and_place(
-    xyz_template: np.ndarray,
-    xyz_ref: np.ndarray,
-    direction: np.ndarray,
-    start_shift: float,
-    target: float,
-    rng: np.random.Generator,
-    max_rot_trials: int = 100,
-) -> np.ndarray:
+def _orient_and_place(xyz_template, xyz_ref, direction, start_shift, target, rng, max_rot_trials = 100):
     """
     Try random rotations (about centroid) followed by translation along
     *direction* until one orientation satisfies the clearance criterion.
@@ -142,14 +126,7 @@ def _orient_and_place(
         "Exhausted all rotation trials; could not place molecule without clash."
     )
 
-def sandwich_molecules(
-    xyz1,
-    xyz2,
-    target = 3.5,
-    max_target = 6.0,
-    increment = 0.5,
-    *,
-    seed = None):
+def sandwich_molecules(xyz1, xyz2, target = 3.5, max_target = 6.0, increment = 0.5, *, seed = None):
     """
     Place **one rotated & translated copies** of *mol1* around *mol2*
     so that *every* atom pair distance is ≥ `target` Å.
@@ -262,7 +239,7 @@ def read_molecules_in_dir(dirname, name_f, target=3.5):
             xyz2_coords = np.array(xyz2_coords.tolist()+xyz1_coords.tolist())
             print('XYZ Concat Coords:')
             print(xyz2_coords)
-            xyz2_chars = xyz1_chars + xyz2_chars
+            xyz2_chars =  xyz2_chars + xyz1_chars
     #Return to original directory. Write molfile
     os.chdir(curr_dir)
     create_molfile(xyz2_chars, xyz2_coords, name_f)
